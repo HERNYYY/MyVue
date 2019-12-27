@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+    <script src="./axios.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="button" value="发送Axios" @click="sendAxios">
+    </div>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+
+            },
+            methods: {
+                sendAxios() {
+                    axios.post('http://www.90jvxing.com:8080/openSjjx/openMember/getMemberDatil', {}, {
+                        headers: { authorization: "Bearer:eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE1Nzc0MzY2MzIsInVzZXJJZCI6IjMxNmIyYjdlNTNlNWQ3ZGYwNmE4ZjY5NzFlYmYwNjMzIn0.6JnaUV9uSZpKdFdTAzKuW710cFGiuAs77x0QMisQShDWGAkDD1U1BaealocgRNB0qesRLpkQbJclYLlxfMoSyg" }
+                    }).then(function (res) {
+                        console.log(res)
+                    }).catch(function (err) {
+                        console.log(err)
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
