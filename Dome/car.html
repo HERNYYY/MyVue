@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <label>编号：
+            <input type="text" v-model="id">
+        </label>
+        <label>品牌：
+            <input type="text" v-model="name" @keyup.enter="add">
+        </label>
+        <input type="button" value="提交" @click="add">
+        <label>
+            <input type="text" v-model="keywords" v-focus v-color="'blue'">
+        </label>
+
+        <table border="1" width="700" style="margin-top: 30px;">
+            <tr>
+                <th>编号</th>
+                <th>品牌</th>
+                <th>时间</th>
+                <th>操作</th>
+            </tr>
+            <tr v-for="item in search(keywords)" :key="item.id">
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.time | timeFilter()}}</td>
+                <td><a href="" @click.prevent="del(item.id)">删除</a></td>
+            </tr>
+        </table>
+    </div>
+    <div id="app2">
+        <p v-color="'green'" v-fontsize="40">{{time | timeFilter}}</p>
+    </div>
+</body>
+<script>
+    Vue.filter('timeFilter', function (time, pre = "") {
+        var dt = new Date(time);
+        var y = dt.getFullYear();
+        var m = (dt.getMonth() + 1).toString().padStart(2, "0");
+        var d = dt.getDate().toString().padStart(2, '0');
+
+        if (pre.toLowerCase() === 'yyyy-mm-dd') {
+            return `${y}-${m}-${d}`
+        } else {
+            var hh = dt.getHours().toString().padStart(2, '0');
+            var mm = dt.getMinutes().toString().padStart(2, '0');
+            var ss = dt.getSeconds().toString().padStart(2, '0');
+            return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
+        }
+
+    })
+
+    Vue.directive('focus', {
+        bind: function (el) { },
+        inserted: function (el) {
+            el.focus()
+        },
+        updata: function (el) { }
+    })
+
+    Vue.directive('color', {
+        bind: function (el, binging) {
+            el.style.color = binging.value
+        }
+    })
+
+
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            id: "",
+            name: "",
+            keywords: "",
+            list: [
+                { id: 1, name: "天籁", time: new Date() },
+                { id: 2, name: "凯美瑞", time: new Date() },
+                { id: 3, name: "雅阁", time: new Date() },
+            ]
+        },
+        methods: {
+            add() {
+                var car = { id: this.id, name: this.name, time: new Date() };
+                this.list.push(car);
+                this.id = this.name = "";
+            },
+            del(id) {
+                /*this.list.some((item, i) => {
+                    if (item.id === id) {
+                        this.list.splice(i, 1);
+                        return true;
+                    }
+                })*/
+
+                var index = this.list.findIndex(item => {
+                    if (item.id == id) {
+                        return true;
+                    }
+                });
+                this.list.splice(index, 1);
+            },
+            search(keywords) {
+                // var newList = [];
+                // this.list.forEach(item => {
+                //     if (item.name.indexOf(keywords) != -1) {
+                //         newList.push(item)
+                //     }
+                // })
+                // return newList;
+
+                return newList = this.list.filter(item => {
+                    if (item.name.includes(keywords)) {
+                        return item;
+                    }
+                })
+            }
+        }
+    })
+
+    var vm2 = new Vue({
+        el: "#app2",
+        data: {
+            time: new Date()
+        },
+        directives: {
+            'fontsize': function (el, binging) {
+                el.style.fontSize = parseInt(binging.value) + 'px';
+            }
+        }
+    })
+</script>
+
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./vue.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h1>{{msg | msgFilter('你吗') | add}}</h1>
+    </div>
+
+    <script>
+        Vue.filter('msgFilter', function (msg, str) {
+            return msg.replace(/废话/g, str + '!')
+        });
+        Vue.filter('add', function (msg) {
+            return msg + '???'
+        })
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                msg: '都是废话都是废话都是废话，，别说废话别说废话别说废话'
+            },
+            methods: {
+
+            }
+        })
+    </script>
+</body>
+
+
+</html>

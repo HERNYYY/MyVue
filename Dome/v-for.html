@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./vue.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            <label>ID:
+                <input type="text" v-model="id">
+            </label>
+            <label>Name:
+                <input type="text" v-model="name">
+            </label>
+            <input type="button" value="添加" @click="add">
+        </div>
+
+        <p v-for="(val,index) in list" :key="val.id"><input type="checkbox"> 编号：{{val.id}} --- 姓名：{{val.name}}</p>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            id: "",
+            name: "",
+            list: [
+                { id: 1, name: "jack" },
+                { id: 2, name: "rose" },
+                { id: 3, name: "tony" },
+                { id: 4, name: "lucy" }
+            ]
+        },
+        methods: {
+            add() {
+                this.list.unshift({ id: this.id, name: this.name });
+            }
+        }
+    })
+</script>
+
+</html>
