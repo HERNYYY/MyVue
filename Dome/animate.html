@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./bin/animate.css">
+    <style>
+        .ball {
+            width: 10px;
+            height: 10px;
+            background: red;
+            border-radius: 50%;
+        }
+
+        li {
+            list-style: none;
+            border: 1px dotted #aaaaaa;
+            margin: 10px;
+            line-height: 35px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        li:hover {
+            background: #ddd;
+            transition: all 1s ease;
+        }
+
+        .v-enter,
+        .v-leave-to {
+            opacity: 0;
+            transform: translateY(80px)
+        }
+
+        .v-enter-active,
+        .v-leave-active {
+            transition: all 1s ease;
+        }
+
+        .v-move {
+            transition: all 1s ease;
+        }
+
+        .v-leave-active {
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" style="text-align: center">
+        <input type="button" value="变~" @click="flag=!flag">
+        <transition enter-active-class="animated tada" leave-active-class="animated jello"
+            :duration="{enter:1000,leave:1000}">
+            <h1 v-if="flag">你好啊啊啊啊啊啊啊啊啊!!!</h1>
+        </transition>
+
+
+        <input type="button" value="来" @click="flag2=!flag2">
+        <transition @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
+            <div class="ball" v-show="flag2"></div>
+        </transition>
+
+        <div>
+            <label>ID:
+                <input type="text" v-model="id">
+            </label>
+            <label>NAME:
+                <input type="text" v-model="name" @keyup.enter="add">
+            </label>
+            <input type="button" value="提交" @click="add">
+        </div>
+        <!-- <ul> -->
+        <transition-group appear tag="ul">
+            <li v-for="(item,i) in list" :key="item.id" @click="del(i)">
+                {{item.id}} --- {{item.name}}
+            </li>
+        </transition-group>
+        <!-- </ul> -->
+    </div>
+</body>
+<script src="./bin/vue.js"></script>
+<script>
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            id: '',
+            name: '',
+            flag: false,
+            flag2: false,
+            list: [
+                { id: 1, name: "天籁" },
+                { id: 2, name: "凯美瑞" },
+                { id: 3, name: "雅阁" },
+            ]
+        },
+        methods: {
+            beforeEnter(el) {
+                el.style.transform = "translate(0,0)"
+            },
+            enter(el, done) {
+                el.offsetWidth
+                el.style.transform = "translate(150px,150px)"
+                el.style.transition = "all 1s ease"
+                done()
+            },
+            afterEnter(el) {
+                this.flag2 = !this.flag2
+            },
+            add() {
+                this.list.push({ id: this.id, name: this.name });
+                this.id = this.name = '';
+            },
+            del(i) {
+                this.list.splice(i, 1);
+            }
+        }
+
+    })
+</script>
+
+</html>

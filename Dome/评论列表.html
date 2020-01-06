@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <com @func='getComment'></com>
+        <ul>
+            <li v-for="(item,index) in list" :key=index>
+                {{item.content}} -------- {{item.user}}
+            </li>
+        </ul>
+    </div>
+
+    <template id="temp">
+        <div>
+            <label>评论人：<input type="text" v-model='user'></label>
+            <label>评论内容：<input type="text" v-model='content'></label>
+            <input type="button" value="评论" @click="add">
+        </div>
+    </template>
+</body>
+<script src="./bin/vue.js"></script>
+<script>
+    var com = {
+        template: '#temp',
+        data() {
+            return {
+                user: '',
+                content: ''
+            }
+        },
+        methods: {
+            add() {
+                var comment = { user: this.user, content: this.content }
+                var list = JSON.parse(localStorage.getItem('comment') || '[]')
+                list.unshift(comment)
+                localStorage.setItem('comment', JSON.stringify(list))
+                this.user = this.content = ''
+                this.$emit('func')
+            }
+        }
+    }
+
+    var vm = new Vue({
+        el: '#app',
+        data: {
+
+            list: ''
+        },
+        created() {
+            this.getComment()
+        },
+        methods: {
+            getComment() {
+                var list = JSON.parse(localStorage.getItem('comment') || '[]')
+                this.list = list
+            }
+        },
+        components: {
+            com
+        }
+    })
+</script>
+
+</html>
